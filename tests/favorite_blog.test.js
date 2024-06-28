@@ -3,23 +3,8 @@ const list_helper = require('../utils/list_helper')
 const { test, describe } = require('node:test')
 const assert = require('node:assert')
 
-describe('total likes of', () => {
-    test('a list with one blog, equals the likes of the property', () => {
-        const list = [
-            {
-                _id: '5a422aa71b54a676234d17f8',
-                title: 'Go To Statement Considered Harmful',
-                author: 'Edsger W. Dijkstra',
-                url: 'https://homepages.cwi.nl/~storm/teaching/reader/Dijkstra68.pdf',
-                likes: 5,
-                __v: 0
-            }
-        ]
-
-        assert.strictEqual(list_helper.totalLikes(list), 5)
-    })
-
-    test('a list of multiple blogs, equals the sum of likes of each list', () => {
+describe('blog with most likes', () => {
+    test('of a list with multiple blogs', () => {
         const blogs = [
             {
                 _id: '5a422a851b54a676234d17f7',
@@ -71,6 +56,13 @@ describe('total likes of', () => {
             }
         ]
 
-        assert.strictEqual(list_helper.totalLikes(blogs), 36)
+        assert.deepStrictEqual(list_helper.favoriteBlog(blogs), {
+            _id: '5a422b3a1b54a676234d17f9',
+            title: 'Canonical string reduction',
+            author: 'Edsger W. Dijkstra',
+            url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+            likes: 12,
+            __v: 0
+        })
     })
 })
