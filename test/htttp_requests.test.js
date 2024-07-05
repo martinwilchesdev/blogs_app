@@ -33,6 +33,13 @@ describe('http request to api', async() => {
 
         assert.strictEqual(blogs.body.length, initialBlogs.length)
     })
+
+    test('validate that property id exist', async() => {
+        const blogs = await api.get('/api/blogs')
+        const validateIdProperty = blogs.body.every(blog => blog.hasOwnProperty('id'))
+    
+        assert(validateIdProperty)
+    })
 })
 
 after(async() => {
