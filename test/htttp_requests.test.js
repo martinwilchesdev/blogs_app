@@ -10,10 +10,10 @@ const api = supertest(app)
 
 const initialBlogs = [
     {
-        "title": "A national anthem",
-        "author": "Beaver Caret",
-        "url": "http://anational.com",
-        "likes": 200
+        title: 'A national anthem',
+        author: 'Beaver Caret',
+        url: 'http://anational.com',
+        likes: 200
     }
 ]
 
@@ -34,11 +34,54 @@ describe('http request to api', async() => {
         assert.strictEqual(blogs.body.length, initialBlogs.length)
     })
 
-    test('validate that property id exist', async() => {
-        const blogs = await api.get('/api/blogs')
-        const validateIdProperty = blogs.body.every(blog => blog.hasOwnProperty('id'))
+    test('validate that the property id exist on the request object', async() => {
+        const blogResult = await api.get('/api/blogs')
     
-        assert(validateIdProperty)
+        assert(blogResult.body[0].hasOwnProperty('id'))
+    })
+
+    test('add a new blog', async() => {
+        const newBlog = {
+            title: 'A beautiful mind',
+            author: 'Kansas Olyck',
+            url: 'http://abeautiful.com',
+            likes: 5,
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        const blogs = await Blog.find({})
+
+        assert.strictEqual(blogs.length, initialBlogs.length + 1)
+    })
+
+    test('if likes property doesn\'t exist in the request, it must be 0', async() => {
+        const newBlog = {
+            title: 'Animal story',
+            author: 'Charles Victory',
+            url: 'http://animalstory.com'
+        }
+
+        const resultBlog = await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(201)
+            .expect('Content-Type', /application\/json/)
+
+        assert.strictEqual(resultBlog.body.likes, 0)
+    })
+
+    test('validate required fields title and url', async() => {
+        const newBlog = {
+            'author': 'Montesquieu',
+            'likes': 100
+        }
+
+        await api.post('/api/blogs')
+            .send(newBlog)
+            .expect(400)
     })
 })
 
