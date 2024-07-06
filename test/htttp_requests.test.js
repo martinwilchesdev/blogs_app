@@ -36,7 +36,7 @@ describe('http request to api', async() => {
 
     test('validate that the property id exist on the request object', async() => {
         const blogResult = await api.get('/api/blogs')
-    
+
         assert(blogResult.body[0].hasOwnProperty('id'))
     })
 
