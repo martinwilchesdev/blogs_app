@@ -25,11 +25,7 @@ blogRouter.delete('/:id', async(req, res) => {
 })
 
 blogRouter.put('/:id', async(req, res) => {
-    const updateLikes = {
-        likes: 600
-    }
-
-    await Blog.findByIdAndUpdate(req.params.id, updateLikes)
+    await Blog.findByIdAndUpdate(req.params.id, { likes: 600 })
 
     res.status(200).end()
 })
