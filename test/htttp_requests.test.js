@@ -27,7 +27,8 @@ before(async() => {
 
 describe('http request to api', async() => {
     test('get the exactly quantity of blogs', async() => {
-        const blogs = await api.get('/api/blogs')
+        const blogs = await api
+            .get('/api/blogs')
             .expect(200)
             .expect('Content-Type', /application\/json/)
 
@@ -48,7 +49,8 @@ describe('http request to api', async() => {
             likes: 5,
         }
 
-        await api.post('/api/blogs')
+        await api
+            .post('/api/blogs')
             .send(newBlog)
             .expect(201)
             .expect('Content-Type', /application\/json/)
@@ -79,9 +81,35 @@ describe('http request to api', async() => {
             'likes': 100
         }
 
-        await api.post('/api/blogs')
+        await api
+            .post('/api/blogs')
             .send(newBlog)
             .expect(400)
+    })
+
+    test('delete a valid note', async() => {
+        const blogsAtStart = await Blog.find({})
+        const blogToView = blogsAtStart[0]
+
+        await api
+            .delete(`/api/blogs/${blogToView.id}`)
+            .expect(204)
+
+        const blogsAtEnd = await Blog.find({})
+        const blogsIds = blogsAtEnd.map(blog => blog.id)
+
+        assert(!blogsIds.includes(blogToView.id))
+    })
+
+    test('update likes property to a valid blog', async() => {
+        const blogsAtStart = await Blog.find({})
+        const blogToView = blogsAtStart[0]
+
+        const blogResult = await api
+            .put(`/api/blogs/${blogToView.id}`)
+            .expect(200)
+
+        assert.strictEqual(blogResult.body.likes, 600)
     })
 })
 
