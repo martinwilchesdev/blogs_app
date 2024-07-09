@@ -4,7 +4,7 @@ const { test, describe } = require('node:test')
 const assert = require('node:assert')
 
 describe('total likes of', () => {
-    test('a list with one blog, equals the likes of the property', () => {
+    test('a list with only one blog', () => {
         const list = [
             {
                 _id: '5a422aa71b54a676234d17f8',
@@ -19,7 +19,7 @@ describe('total likes of', () => {
         assert.strictEqual(list_helper.totalLikes(list), 5)
     })
 
-    test('a list of multiple blogs, equals the sum of likes of each list', () => {
+    test('a list of multiple blogs', () => {
         const blogs = [
             {
                 _id: '5a422a851b54a676234d17f7',

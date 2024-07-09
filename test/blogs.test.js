@@ -25,8 +25,8 @@ before(async() => {
     await newBlogs.save()
 })
 
-describe('http request to api', async() => {
-    test('get the exactly quantity of blogs', async() => {
+describe('http request get', async() => {
+    test('exactly quantity of blogs', async() => {
         const blogs = await api
             .get('/api/blogs')
             .expect(200)
@@ -35,13 +35,15 @@ describe('http request to api', async() => {
         assert.strictEqual(blogs.body.length, initialBlogs.length)
     })
 
-    test('validate that the property id exist on the request object', async() => {
+    test('to validate that the property id exist on the request object', async() => {
         const blogResult = await api.get('/api/blogs')
 
         assert(blogResult.body[0].hasOwnProperty('id'))
     })
+})
 
-    test('add a new blog', async() => {
+describe('http request post', async() => {
+    test('to add a new blog', async() => {
         const newBlog = {
             title: 'A beautiful mind',
             author: 'Kansas Olyck',
@@ -60,7 +62,7 @@ describe('http request to api', async() => {
         assert.strictEqual(blogs.length, initialBlogs.length + 1)
     })
 
-    test('if likes property doesn\'t exist in the request, it must be 0', async() => {
+    test('to validate if likes property doesn\'t exist in the request, it must be saves as 0', async() => {
         const newBlog = {
             title: 'Animal story',
             author: 'Charles Victory',
@@ -75,7 +77,7 @@ describe('http request to api', async() => {
         assert.strictEqual(resultBlog.body.likes, 0)
     })
 
-    test('validate required fields title and url', async() => {
+    test('to validate if the title and URL fields exist in the request', async() => {
         const newBlog = {
             'author': 'Montesquieu',
             'likes': 100
@@ -86,8 +88,10 @@ describe('http request to api', async() => {
             .send(newBlog)
             .expect(400)
     })
+})
 
-    test('delete a valid note', async() => {
+describe('http request delete', async() => {
+    test('a valid note', async() => {
         const blogsAtStart = await Blog.find({})
         const blogToView = blogsAtStart[0]
 
@@ -100,8 +104,10 @@ describe('http request to api', async() => {
 
         assert(!blogsIds.includes(blogToView.id))
     })
+})
 
-    test('update likes property to a valid blog', async() => {
+describe('http request put', async() => {
+    test('to update likes property to a valid blog', async() => {
         const blogsAtStart = await Blog.find({})
         const blogToView = blogsAtStart[0]
 
