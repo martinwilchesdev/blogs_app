@@ -2,6 +2,9 @@ const { test, after, before, describe } = require('node:test')
 const assert = require('node:assert')
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const helper = require('../helpers/blogs')
 const mongoose = require('mongoose')
 const app = require('../app')
 
@@ -44,11 +47,14 @@ describe('http request get', async() => {
 
 describe('http request post', async() => {
     test('to add a new blog', async() => {
+        const user = await helper.getFirstUser()
+
         const newBlog = {
             title: 'A beautiful mind',
             author: 'Kansas Olyck',
             url: 'http://abeautiful.com',
             likes: 5,
+            userid: user.id
         }
 
         await api
@@ -63,10 +69,13 @@ describe('http request post', async() => {
     })
 
     test('to validate if likes property doesn\'t exist in the request, it must be saves as 0', async() => {
+        const user = await helper.getFirstUser()
+
         const newBlog = {
             title: 'Animal story',
             author: 'Charles Victory',
-            url: 'http://animalstory.com'
+            url: 'http://animalstory.com',
+            userid: user.id
         }
 
         const resultBlog = await api.post('/api/blogs')
