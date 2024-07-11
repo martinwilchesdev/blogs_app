@@ -15,4 +15,13 @@ const handleError = (error, req, res, next) => {
     }
 }
 
-module.exports = { handleError, unknownEndpoint }
+const extractToken = (req, res, next) => {
+    const token = req.get('authorization')?.replace('Bearer ', '')
+    req.token = token !== undefined
+        ? token
+        : null
+
+    next()
+}
+
+module.exports = { handleError, unknownEndpoint, extractToken }
