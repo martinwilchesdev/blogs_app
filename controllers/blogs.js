@@ -37,9 +37,22 @@ blogRouter.post('/', async (req, res) => {
 })
 
 blogRouter.delete('/:id', async (req, res) => {
-    await Blog.findByIdAndDelete(req.params.id)
+    const deletedBlog = await Blog.findByIdAndDelete(req.params.id)
 
-    res.status(204).end()
+    const userToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (userToken.userid) {
+        if (deletedBlog) {
+            if (userToken.userid === deletedBlog.user.toString()) {
+                return res.status(204).end()
+            }
+            return res.status(401).json({ error: "the specified user cannot delete the blog" })
+        }
+
+        return res.status(404).json({ error: 'the specified blog doesn\'t exist' })
+    } else {
+        return res.status(401).json({ error: 'the user id cannot be found' })
+    }
 })
 
 blogRouter.put('/:id', async (req, res) => {
