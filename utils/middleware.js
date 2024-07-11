@@ -1,5 +1,10 @@
 const logger = require('../utils/logger')
 
+const unknownEndpoint = (req, res, next) => {
+    res.status(404).json({error: 'unreachable endpoint'})
+    next()
+}
+
 const handleError = (error, req, res, next) => {
     logger.error(error.message)
 
@@ -10,6 +15,4 @@ const handleError = (error, req, res, next) => {
     }
 }
 
-module.exports = {
-    handleError
-}
+module.exports = { handleError, unknownEndpoint }
