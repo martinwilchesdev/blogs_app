@@ -11,7 +11,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         minLength: [3, 'the password is too short']
     },
-    name: String,
+    name: {
+        type: String,
+        required: true
+    },
     blogs: [
         {
             type: mongoose.Schema.Types.ObjectId,

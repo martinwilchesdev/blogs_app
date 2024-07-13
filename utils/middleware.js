@@ -9,7 +9,6 @@ const unknownEndpoint = (req, res, next) => {
 
 const handleError = (error, req, res, next) => {
     logger.error(error.message)
-    console.log(error.name)
 
     if (error.name === 'MongoServerError' && error.message.includes('E11000 duplicate key error')) {
         return res.status(409).json({ error: 'the username must be unique' })
